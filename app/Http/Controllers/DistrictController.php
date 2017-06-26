@@ -101,6 +101,9 @@ class DistrictController extends Controller
         }
 
         public function getAllPosNull() {
+            /* Поставить лимит выполнения скрипта - 10 часов */
+            set_time_limit(36000);
+
             $houses = DB::select('select * from hous where "VERSION" IS NOT NULL and "POS" IS NULL');
 
             foreach($houses as $key => $value) {

@@ -22,6 +22,9 @@ class UpdateController extends Controller
 
     /* @brief Обновить базу данных */
     public function updateDatabase() {
+        /* Поставить лимит выполнения скрипта - 10 часов */
+        set_time_limit(36000);
+
         $this->filesVersions();         /* Получить информацию о версиях */
 
         /* Проверка на текущую послежнюю версию обновлшения. Версия файла будет хранится отдельном файле. */

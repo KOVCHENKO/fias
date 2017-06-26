@@ -50,4 +50,9 @@ class QuerryController extends Controller
 
         return $allBuildings;
     }
+
+    public function updatePosition($first, $second) {
+
+
+    }
 }
