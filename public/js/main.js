@@ -10,7 +10,7 @@ new Vue({
     },
 
     created() {
-        this.downloadIteration(0);
+        // this.downloadIteration(0);
         // this.setPoints();
     },
 
