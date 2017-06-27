@@ -46,7 +46,7 @@ class QuerryController extends Controller
     /* Выбрать все дома на улице */
     public function chooseBuilding($streetId) {
         $allBuildings = DB::table('hous')
-            ->select('HOUSENUM', 'STRUCNUM', 'HOUSEGUID')
+            ->select('HOUSENUM', 'STRUCNUM', 'HOUSEGUID', 'BUILDNUM', 'POSTALCODE')
             ->distinct()
             ->where('AOGUID', '=', $streetId)
             ->get();
