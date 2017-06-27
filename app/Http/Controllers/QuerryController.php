@@ -33,6 +33,7 @@ class QuerryController extends Controller
     /* Выбрать все улицы */
     public function chooseStreet($cityId) {
         $allStreets = DB::table('addrs')
+            ->select('AOGUID', 'FORMALNAME', 'SHORTNAME')
             ->where([
                 'PARENTGUID' => $cityId,
                 'ACTSTATUS' => 1
@@ -45,13 +46,16 @@ class QuerryController extends Controller
     /* Выбрать все дома на улице */
     public function chooseBuilding($streetId) {
         $allBuildings = DB::table('hous')
+            ->select('HOUSENUM', 'STRUCNUM', 'HOUSEGUID')
+            ->distinct()
             ->where('AOGUID', '=', $streetId)
             ->get();
 
         return $allBuildings;
     }
 
-    public function updatePosition($first, $second) {
+    /* Обновить информацию об адресе вручную */
+    public function updatePosition($second, $first) {
 
 
     }
