@@ -220,7 +220,7 @@ new Vue({
         /* Получить все здания */
         getBuildings() {
             let self = this;
-            this.$http.get('http://fiasadr/choose_building/' + this.address.street.AOGUID).then(response => {
+            this.$http.get('http://http://fias.webart.im/choose_building/' + this.address.street.AOGUID).then(response => {
                 if (response.body.result !== '') {
                     self.buildings = response.body;
                 } else {
