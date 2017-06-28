@@ -318,7 +318,7 @@ new Vue({
         /************* Отправка заявки на изменение адреса, если нет дома *************/
         sendApplication() {
             let self = this;
-            this.$http.post('http://fiasadr/send_application/',
+            this.$http.post('http://fias.webart.im/send_application/',
                 {
                     fullAddress: 'Астраханская область, ' + this.address.district.FORMALNAME + 'район, ' + this.address.city.FORMALNAME + ', улица ' + this.address.street.FORMALNAME,
                     streetName: this.application.STREETNAME,
