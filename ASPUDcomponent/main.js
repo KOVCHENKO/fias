@@ -209,6 +209,10 @@ new Vue({
             $('#ul-street').hide();
 
             // this.disabled.street = true;
+            this.address.building = {
+                HOUSEID: '',
+                HOUSENUM: '',
+            };
 
             this.visibility.buildingList = true;
         },
@@ -291,7 +295,7 @@ new Vue({
 
         findBy(list, value, column) {
             return list.filter(function (item) {
-                return (item[column] || '').includes(value)
+                return (item[column].toLowerCase() || '').includes(value.toLowerCase())
             })
         },
 
@@ -306,6 +310,7 @@ new Vue({
         },
 
         changeCity() {
+            this.cities = [];
             this.streets = [];
             this.getCities();
             this.visibility.streetList = false;
@@ -315,6 +320,7 @@ new Vue({
         changeStreet() {
             this.cities = [];
             this.streets = [];
+
             this.getStreets();
             this.visibility.buildingList = false;
         },

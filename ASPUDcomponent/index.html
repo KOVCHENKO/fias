@@ -67,7 +67,7 @@
                 <div class="col-sm-4"><label class="input-title">Улица:</label></div>
                 <div class="col-sm-8">
                     <div class="input-group">
-                        <input type="text" class="form-control" aria-label="..." placeholder="Улица"
+                        <input type="text" class="form-control" aria-label="..." placeholder="Улица" @keydown="changeStreet"
                                v-model="address.street.FORMALNAME" id="input-street" :disabled="disabled.street">
                         <div class="input-group-btn">
                             <button type="button" id="dropdown-toggle-street" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
