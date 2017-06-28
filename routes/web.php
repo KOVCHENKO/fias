@@ -32,6 +32,9 @@ http://fiasadr/choose_building/37934bab-6962-4c66-ac61-c9276f78dbcc
 Route::get('/choose_building/{street_id}', 'QuerryController@chooseBuilding');
 
 
+/* Отправить заявку, если номера дома нет в списке ФИАС */
+Route::post('/send_application', 'ApplicationController@sendApplication');
+
 
 /*
 |--------------------------------------------------------------------------

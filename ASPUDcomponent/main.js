@@ -50,7 +50,6 @@ new Vue({
     },
 
     data: {
-
             address: {
                 region: 'Астраханская область',
                 district: {
@@ -92,6 +91,16 @@ new Vue({
                 city: false,
                 street: false
             },
+
+            noHouse: false,
+
+            application: {
+                HOUSENUM: '',
+                STREETNAME: '',
+                noAddressMessage: '',
+                applicationSendMessage: false,
+                applicationForStreetVisibility: false
+            }
     },
 
     methods: {
@@ -192,8 +201,17 @@ new Vue({
             this.$http.get('http://fias.webart.im/choose_street/' + this.address.city.AOGUID).then(response => {
                 if (response.body.length === 0) {
                     self.streets.push({"FORMALNAME": "Улицы отсутствуют", "AOGUID": self.address.city.AOGUID});
-                    console.log(self.streets)
+                    self.application.applicationForStreetVisibility = true;
+                    self.application.noAddressMessage = 'Моей улицы или дома нет в списке. Кликните, чтобы написать заявку';
+                    self.noHouse = true;
                 } else {
+                    let arr = response.data;
+                    arr.forEach(function(item, i, arr) {
+                        if (item.SHORTNAME !== null) {
+                            item.SHORTNAME = item.SHORTNAME + '. ';
+                        }
+                    });
+
                     self.streets = response.body;
                 }
 
@@ -220,11 +238,19 @@ new Vue({
         /* Получить все здания */
         getBuildings() {
             let self = this;
-            this.$http.get('http://http://fias.webart.im/choose_building/' + this.address.street.AOGUID).then(response => {
-                if (response.body.result !== '') {
-                    self.buildings = response.body;
-                } else {
+            this.$http.get('http://fias.webart.im/choose_building/' + this.address.street.AOGUID).then(response => {
+                if (response.body.length === 0) {
                     self.buildings.push({"HOUSENUM": "Нет данных "});
+                    self.application.noAddressMessage = 'Моего дома нет в списке. Кликните, чтобы написать заявку';
+                    self.noHouse = true;
+                } else {
+                    let arr = response.data;
+                    arr.forEach(function(item, i, arr) {
+                        if (item.BUILDNUM !== null) {
+                            item.HOUSENUM = item.HOUSENUM + ' корп ' + item.BUILDNUM;
+                        }
+                    });
+                    self.buildings = response.body;
                 }
             }, response => {});
         },
@@ -255,42 +281,6 @@ new Vue({
                 + this.address.city.FORMALNAME
                 + ';'
                 + this.address.building.HOUSENUM
-        },
-
-        cancel() {
-            this.districts = [];
-            this.cities = [];
-            this.streets = [];
-            this.buildings = [];
-
-            this.disabled.district = false;
-            this.disabled.city = false;
-            this.disabled.street = false;
-
-            this.visibility.streetList = false;
-            this.visibility.buildingList = false;
-            this.visibility.cityList = false;
-
-            this.address.district.FORMALNAME = '';
-            // $('#ul-district').show();
-
-            this.address.city.FORMALNAME = '';
-            // $('#ul-city').show();
-
-            this.address.street.FORMALNAME = '';
-            // $('#ul-street').show();
-
-            this.address.building.HOUSENUM = '';
-            // $('#ul-building').show();
-
-            this.address.district.FORMALNAME = '';
-            this.address.city.FORMALNAME = '';
-            this.address.street.FORMALNAME = '';
-            this.address.building.HOUSENUM = '';
-
-            this.address.string = '';
-
-            this.getDistricts();
         },
 
         findBy(list, value, column) {
@@ -324,6 +314,22 @@ new Vue({
             this.getStreets();
             this.visibility.buildingList = false;
         },
+
+        /************* Отправка заявки на изменение адреса, если нет дома *************/
+        sendApplication() {
+            let self = this;
+            this.$http.post('http://fiasadr/send_application/',
+                {
+                    fullAddress: 'Астраханская область, ' + this.address.district.FORMALNAME + 'район, ' + this.address.city.FORMALNAME + ', улица ' + this.address.street.FORMALNAME,
+                    streetName: this.application.STREETNAME,
+                    houseNumber: this.application.HOUSENUM
+                }).then(response => {
+                    $('#noAddressModal').modal('hide');
+                    self.noHouse = false;
+                    self.application.applicationSendMessage = true;
+                }, response => {});
+
+        }
 
     },
 
