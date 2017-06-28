@@ -82,7 +82,7 @@
                 <div class="col-sm-4"><label class="input-title">Дом:</label></div>
                 <div class="col-sm-8">
                     <div class="input-group">
-                        <input type="text" class="form-control" aria-label="..." placeholder="Дом"
+                        <input type="text" class="form-control" aria-label="..." placeholder="Дом" @keydown="changeBuilding"
                                v-model="address.building.HOUSENUM" id="input-building" @keyup="setAddressString">
                         <div class="input-group-btn">
                             <button type="button" id="dropdown-toggle-building" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>

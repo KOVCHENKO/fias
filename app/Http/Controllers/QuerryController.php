@@ -9,7 +9,9 @@ class QuerryController extends Controller
 {
     /* Выбрать все районы Астраханской области */
     public function chooseDistrict() {
-        $allDistricts = DB::table('addrs')->where([
+        $allDistricts = DB::table('addrs')
+            ->select('AOGUID', 'FORMALNAME')
+            ->where([
             'AOLEVEL' => 3,
             'ACTSTATUS' => 1
         ])->get();
@@ -20,6 +22,7 @@ class QuerryController extends Controller
     /* Выбрать все города/села Района */
     public function chooseCity($districtId) {
         $allCities = DB::table('addrs')
+            ->select('AOGUID', 'FORMALNAME')
             ->where([
                 'PARENTGUID' => $districtId,
                 'ACTSTATUS' => 1

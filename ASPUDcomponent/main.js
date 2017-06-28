@@ -50,6 +50,9 @@ new Vue({
     },
 
     data: {
+            /* Изменить данную переменную на true, чтобы пользователь смог сохранять адреса в БД */
+            saveOption: false,
+
             address: {
                 region: 'Астраханская область',
                 district: {
@@ -79,6 +82,7 @@ new Vue({
             cities: [],
             streets: [],
             buildings: [],
+            backupBuildings: [],
 
             visibility: {
                 cityList: false,
@@ -251,6 +255,7 @@ new Vue({
                         }
                     });
                     self.buildings = response.body;
+                    self.backupBuildings = response.body;
                 }
             }, response => {});
         },
@@ -261,14 +266,19 @@ new Vue({
 
             this.address.building = building;
 
-            /* Сформировать строку с адресом */
-            this.address.string = this.address.building.POSTALCODE
-                + ';Астраханская область;'
-                + this.address.district.FORMALNAME
-                + ';'
-                + this.address.city.FORMALNAME
-                + ';'
-                + this.address.building.HOUSENUM
+            /* Сформировать строку с адресом. Опция, если переменная this.saveOption = false, то сохранить не получится */
+            if (this.saveOption === true) {
+                this.address.string = this.address.building.POSTALCODE
+                    + ';Астраханская область;'
+                    + this.address.district.FORMALNAME
+                    + ';'
+                    + this.address.city.FORMALNAME
+                    + ';'
+                    + this.address.building.HOUSENUM
+            } else {
+                this.address.string = '';
+            }
+
         },
 
         /* Выбрать дом/здание */
@@ -313,6 +323,11 @@ new Vue({
 
             this.getStreets();
             this.visibility.buildingList = false;
+        },
+
+        changeBuilding() {
+            this.buildings = [];
+            this.getBuildings();
         },
 
         /************* Отправка заявки на изменение адреса, если нет дома *************/
