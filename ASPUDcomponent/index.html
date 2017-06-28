@@ -37,7 +37,7 @@
                 <div class="col-sm-4"><label class="input-title">Район:</label></div>
                 <div class="col-sm-8 clearfix">
                     <div class="input-group">
-                        <input type="text" class="form-control" aria-label="..." placeholder="Район"
+                        <input type="text" class="form-control" aria-label="..." placeholder="Район" @keydown="changeDistrict"
                                v-model="address.district.FORMALNAME" id="input-district" :disabled="disabled.district">
                         <div class="input-group-btn">
                             <button type="button" id="dropdown-toggle-address" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
@@ -52,7 +52,7 @@
                 <div class="col-sm-4"><label class="input-title">Город/село/поселок:</label></div>
                 <div class="col-sm-8 clearfix">
                     <div class="input-group">
-                        <input type="text" class="form-control" aria-label="..." placeholder="Город/село/поселок"
+                        <input type="text" class="form-control" aria-label="..." placeholder="Город/село/поселок" @keydown="changeCity"
                                v-model="address.city.FORMALNAME" id="input-city" :disabled="disabled.city">
                         <div class="input-group-btn">
                             <button type="button" id="dropdown-toggle-city" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
@@ -93,9 +93,6 @@
                     </div><!-- /input-group -->
                 </div>
             </div>
-        <div class="modal-footer">
-            <p @click="cancel">Отменить</p>
-        </div>
 
         <input name="address" type="hidden" data-alias="address" v-model="address.string">
     </form>

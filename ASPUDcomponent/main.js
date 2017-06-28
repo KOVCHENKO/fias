@@ -128,7 +128,22 @@ new Vue({
 
             $('#ul-district').hide();
 
-            this.disabled.district = true;
+            // this.disabled.district = true;
+            this.address.city = {
+                FORMALNAME: '',
+                AOGUID: '',
+            };
+
+            this.address.street = {
+                FORMALNAME: '',
+                AOGUID: '',
+            };
+
+            this.address.building = {
+                HOUSEID: '',
+                HOUSENUM: '',
+            };
+
 
             this.visibility.streetList = false;
             this.visibility.buildingList = false;
@@ -154,7 +169,17 @@ new Vue({
             this.getStreets();
             $('#ul-city').hide();
 
-            this.disabled.city = true;
+            // this.disabled.city = true;
+
+            this.address.street = {
+                FORMALNAME: '',
+                AOGUID: '',
+            };
+
+            this.address.building = {
+                HOUSEID: '',
+                HOUSENUM: '',
+            };
 
             this.visibility.buildingList = false;
             this.visibility.streetList = true;
@@ -183,7 +208,7 @@ new Vue({
 
             $('#ul-street').hide();
 
-            this.disabled.street = true;
+            // this.disabled.street = true;
 
             this.visibility.buildingList = true;
         },
@@ -191,7 +216,7 @@ new Vue({
         /* Получить все здания */
         getBuildings() {
             let self = this;
-            this.$http.get('http://fias.webart.im/choose_building/' + this.address.street.AOGUID).then(response => {
+            this.$http.get('http://fiasadr/choose_building/' + this.address.street.AOGUID).then(response => {
                 if (response.body.result !== '') {
                     self.buildings = response.body;
                 } else {
@@ -269,6 +294,31 @@ new Vue({
                 return (item[column] || '').includes(value)
             })
         },
+
+        /*********************** Изменение данных ***********************/
+        changeDistrict() {
+            this.getDistricts();
+            this.cities = [];
+
+            this.visibility.streetList = false;
+            this.visibility.buildingList = false;
+            this.visibility.cityList = false;
+        },
+
+        changeCity() {
+            this.streets = [];
+            this.getCities();
+            this.visibility.streetList = false;
+            this.visibility.buildingList = false;
+        },
+
+        changeStreet() {
+            this.cities = [];
+            this.streets = [];
+            this.getStreets();
+            this.visibility.buildingList = false;
+        },
+
     },
 
     computed: {
