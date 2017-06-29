@@ -13,13 +13,18 @@ Route::get('/null', 'DistrictController@getAllPosNull');
 /**
  * @brief - Группа маршрутов для выборки данных
  */
-/* Выбрать районы */
-Route::get('/choose_district', 'QuerryController@chooseDistrict');
+/* Выбрать районы
+* Второй маршрут - выбрать район по id города
+*/
+Route::get('/choose_district/{parent_id}', 'QuerryController@getDistrictByCityId');
+Route::get('/choose_district_by_parent', 'QuerryController@chooseDistrict');
 
 /* Выбрать города
 http://fiasadr/choose_city/46c0e38f-d339-4149-acfa-0d6ae968d2b6 - Черноярского района
+Второй маршрут - выбрать все города во всей области
 */
 Route::get('/choose_city/{district_id}', 'QuerryController@chooseCity');
+Route::get('/choose_cities/', 'QuerryController@getAllCities');
 
 /* Выбрать улицы
 http://fiasadr/choose_street/a80776c8-5a17-42c9-b498-41c0a0aa84fd
