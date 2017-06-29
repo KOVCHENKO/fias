@@ -116,7 +116,7 @@ class QuerryController extends Controller
             array_push($allHousesInStreet, $singleHouse);
         }
 
-        return $allBuildings;
+        return $allHousesInStreet;
     }
 
     /* Обновить информацию об адресе вручную */
