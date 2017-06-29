@@ -21,7 +21,7 @@ class QuerryController extends Controller
             ->where([
                 'AOGUID' => $parentId,
                 'ACTSTATUS' => 1
-            ])->first();
+            ])->get();
 
         return $districtName;
     }
