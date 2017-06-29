@@ -17,13 +17,17 @@ class QuerryController extends Controller
     /* Выбрать район по id города */
     public function getDistrictByCityId($parentId) {
         $districtName = DB::table('addrs')
-            ->select('AOGUID', 'FORMALNAME', 'SHORTCADNUM')
+            ->select('AOGUID', 'FORMALNAME', 'SHORTCADNUM', 'AOLEVEL')
             ->where([
                 'AOGUID' => $parentId,
                 'ACTSTATUS' => 1
             ])->get();
 
-        return $districtName;
+        if ($districtName[0]->AOLEVEL == 1) {
+            return null;
+        } else {
+            return $districtName;
+        }
     }
 
     /* Выбрать все районы Астраханской области */
