@@ -19,13 +19,9 @@ class ApplicationController extends Controller
             $message->to(env('MAIL_USERNAME'))
                 ->subject('FIAS: NEW ADDRESS');
         });*/
-        Log::info(var_export($request,true));
-        Log::info("INSERT INTO requests values(DEFAULT,".$request->input('person_id').",".
-            $request['new-district'].",".$request['new-region'].",".$request['new-city'].",".$request['new-street'].",".
-            $request['new-house'].",".$request['comments']);
-        DB::statement("INSERT INTO requests values(DEFAULT,".$request['person_id'].",".
-            $request['new-district'].",".$request['new-region'].",".$request['new-city'].",".$request['new-street'].",".
-            $request['new-house'].",".$request['comments']);
+        DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
+            $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
+            $request['data']['new-house']."','".$request['data']['comments']."')");
 
     }
 }
