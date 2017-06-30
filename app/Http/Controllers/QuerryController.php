@@ -16,7 +16,7 @@ class QuerryController extends Controller
                                 from addrs as a
                                 JOIN addrs as b
                                 ON (a."PARENTGUID" = b."AOGUID")
-                                where (a."AOLEVEL" = 4 or a."AOLEVEL" = 6) and a."ACTSTATUS" = 1');
+                                where (a."AOLEVEL" = 4 or a."AOLEVEL" = 6) and a."ACTSTATUS" = 1 and b."ACTSTATUS" = 1');
 
         foreach($allCities as $key => $value) {
             array_push($allCitiesArray, ([
@@ -51,9 +51,9 @@ class QuerryController extends Controller
         $allDistricts = DB::table('addrs')
             ->select('AOGUID', 'FORMALNAME', 'SHORTCADNUM')
             ->where([
-            'AOLEVEL' => 3,
-            'ACTSTATUS' => 1
-        ])->get();
+                'AOLEVEL' => 3,
+                'ACTSTATUS' => 1
+            ])->get();
 
         return $allDistricts;
     }
@@ -79,7 +79,7 @@ class QuerryController extends Controller
             ->where([
                 'PARENTGUID' => $cityId,
                 'ACTSTATUS' => 1
-                ])
+            ])
             ->get();
 
         return $allStreets;
