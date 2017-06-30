@@ -8,10 +8,26 @@ use Illuminate\Support\Facades\DB;
 class QuerryController extends Controller
 {
 
-    /* Выбрать все города в общем по всей области */
+    /* Выбрать все города в общем по всей области - в скобках - название области */
     public function getAllCities() {
-        return DB::select('select "FORMALNAME", "PARENTGUID", "AOGUID", "SHORTNAME" from addrs 
-                            where ("AOLEVEL" = 4 or "AOLEVEL" = 6) and "ACTSTATUS" = 1');
+        $allCitiesArray = array();
+
+        $allCities = DB::select('select b."FORMALNAME" as "district", a."FORMALNAME" as "city", a."PARENTGUID", a."AOGUID", a."SHORTNAME" 
+                                from addrs as a
+                                JOIN addrs as b
+                                ON (a."PARENTGUID" = b."AOGUID")
+                                where (a."AOLEVEL" = 4 or a."AOLEVEL" = 6) and a."ACTSTATUS" = 1');
+
+        foreach($allCities as $key => $value) {
+            array_push($allCitiesArray, ([
+                'FORMALNAME' => $value->city.' ('.$value->district.')',
+                'PARENTGUID' => $value->PARENTGUID,
+                'AOGUID' => $value->AOGUID,
+                'SHORTNAME' => $value->SHORTNAME,
+            ]));
+        }
+
+        return $allCitiesArray;
     }
 
     /* Выбрать район по id города */
