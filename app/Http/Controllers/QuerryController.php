@@ -24,7 +24,7 @@ class QuerryController extends Controller
             ])->get();
 
         if ($districtName[0]->AOLEVEL == 1) {
-            return null;
+            return '[]';
         } else {
             return $districtName;
         }
