@@ -105,12 +105,15 @@ class QuerryController extends Controller
                     }
                     break;
                 case 1: /* Признак строение "стр" */
-                    if (!isset($value->BUILDNUM)) {
+                    if (!isset($value->HOUSENUM) and !isset($value->BUILDNUM)) {
+                        $formalName = 'стр. '.$value->STRUCNUM;
+                    } elseif(!isset($value->BUILDNUM)) {
                         $formalName = $value->HOUSENUM.', стр. '.$value->STRUCNUM;
                     } else {
                         $formalName = $value->HOUSENUM.', корп. '.$value->BUILDNUM.', стр. '.$value->STRUCNUM;
                     }
                     break;
+//                    TODO: добавить отсутствие номера дома и номера корпуса
                 case 2: /* Признак сооружение "соор" */
                     if (!isset($value->BUILDNUM)) {
                         $formalName = $value->HOUSENUM.', соор. '.$value->STRUCNUM;
