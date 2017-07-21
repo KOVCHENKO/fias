@@ -113,7 +113,6 @@ class QuerryController extends Controller
                         $formalName = $value->HOUSENUM.', корп. '.$value->BUILDNUM.', стр. '.$value->STRUCNUM;
                     }
                     break;
-//                    TODO: добавить отсутствие номера дома и номера корпуса
                 case 2: /* Признак сооружение "соор" */
                     if (!isset($value->BUILDNUM)) {
                         $formalName = $value->HOUSENUM.', соор. '.$value->STRUCNUM;

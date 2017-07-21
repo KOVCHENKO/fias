@@ -19,9 +19,18 @@ class ApplicationController extends Controller
             $message->to(env('MAIL_USERNAME'))
                 ->subject('FIAS: NEW ADDRESS');
         });*/
-        DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
-            $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-            $request['data']['new-house']."','".$request['data']['comments']."')");
+
+        if (isset($request['data']['person_id'])) {
+            DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
+                $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
+                $request['data']['new-house']."','".$request['data']['comments']."')");
+        } else {
+            DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
+                $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
+                $request['data']['new-house']."','".$request['data']['comments']."')");
+        }
+
+
 
     }
 }
