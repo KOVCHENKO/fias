@@ -19,7 +19,6 @@ class ApplicationController extends Controller
             $message->to(env('MAIL_USERNAME'))
                 ->subject('FIAS: NEW ADDRESS');
         });*/
-
         if (isset($request['data']['person_id'])) {
             DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
                 $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
@@ -30,7 +29,7 @@ class ApplicationController extends Controller
                 $request['data']['new-house']."','".$request['data']['comments']."')");
         }
 
-
+        return "Request has been performed. Application will be sent to the database.";
 
     }
 }
