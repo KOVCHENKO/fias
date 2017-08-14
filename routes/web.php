@@ -81,6 +81,7 @@ Route::get('/extract', 'UpdateController@getRar');
 Route::get('/download','UpdateController@downloadFiasFile');
 
 Route::get('/version', 'UpdateController@filesVersions');
+Route::get('/last_version', 'UpdateController@lastFileVersion');
 
 Route::get('/update_houses', 'UpdateController@updateHouses');
 

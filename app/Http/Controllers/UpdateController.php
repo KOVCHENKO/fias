@@ -16,21 +16,22 @@ class UpdateController extends Controller
      */
     private $updateVersion;
     private $deltaXML;
-    private $deltaDBF;
+    /* private $deltaDBF; deprecated - для получения всех версий */
+    private $deltaDBF = 'http://fias.nalog.ru/Public/Downloads/Actual/fias_delta_dbf.rar';
     private $addressFileName;
 
 
     /* @brief Обновить базу данных */
     public function updateDatabase() {
         /* Поставить лимит выполнения скрипта - 10 часов */
-        set_time_limit(36000);
+        set_time_limit(360000);
 
-        $this->filesVersions();         /* Получить информацию о версиях */
+        $this->lastFileVersion(); /* Получить информацию о последней версии */
 
         /* Проверка на текущую послежнюю версию обновлшения. Версия файла будет хранится отдельном файле. */
-        $currentVersion = file_get_contents('update_version.txt');
+        $currentVersion = file_get_contents('update_version_last.txt');
         if ($currentVersion != $this->updateVersion) {
-            file_put_contents('update_version.txt', $this->updateVersion);
+            file_put_contents('update_version_last.txt', $this->updateVersion);
             $this->deleteAllInRarFolder();  /* Удалить все файлы в папке rarfiles */
             $this->updateAddresses();       /* Обновить адреса */
             $this->updateHouses();          /* Обновить дома */
@@ -40,6 +41,8 @@ class UpdateController extends Controller
 
     /* @brief Удалить все файлы в папке rarfiles */
     public function deleteAllInRarFolder() {
+//        chmod("/rarfiles/*", 755);   // decimal; probably incorrect
+
         $files = glob('rarfiles/*'); /* Получить все названия файлов */
         foreach($files as $file) {
             if(is_file($file))
@@ -129,6 +132,7 @@ class UpdateController extends Controller
                     $rowEncoded['CADNUM'] == '' ? $newAddress->CADNUM = $rowEncoded['CADNUM'] : $newAddress->CADNUM = $rowEncoded['CADNUM'] = 0;
                     $newAddress->DIVTYPE = $rowEncoded['DIVTYPE'];
                     $newAddress->VERSION = $this->updateVersion;
+                    $newAddress->SHORTCADNUM = '30';
                     $newAddress->save();
         }
         echo "Address update has been finished <br>";
@@ -209,6 +213,14 @@ class UpdateController extends Controller
         return $rowEncoded;
     }
 
+    /* @brief Используется для получения последней версии fias */
+    public function lastFileVersion() {
+        $lastVersion = file_get_contents('https://fias.nalog.ru/Public/Downloads/Actual/VerDate.txt');
+        $this->updateVersion = $lastVersion;
+
+        return $lastVersion;
+    }
+
     /* @brief Используется для получения всех версий fias */
     public function filesVersions() {
         $fias_url     = 'http://fias.nalog.ru/WebServices/Public/DownloadService.asmx';
@@ -247,7 +259,6 @@ class UpdateController extends Controller
             ] );
 
         $result = curl_exec($curl);
-
         curl_close($curl);
 
         $xmlUploaded = file_get_contents('versions.xml');
@@ -267,6 +278,6 @@ class UpdateController extends Controller
         $this->deltaXML = $lastVersion->FiasDeltaXmlUrl;
         $this->deltaDBF = $lastVersion->FiasDeltaDbfUrl;
 
-        echo "Versions has been acquired <br>";
+        echo "Versions has been acquired <br> $this->updateVersion";
     }
 }
