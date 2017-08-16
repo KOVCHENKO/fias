@@ -29,6 +29,7 @@ class UpdateController extends Controller
         $this->lastFileVersion(); /* Получить информацию о последней версии */
 
         /* Проверка на текущую послежнюю версию обновлшения. Версия файла будет хранится отдельном файле. */
+        /* TODO: Включить проверку на обновление всех строк. Удалять строки, которые уже были перенесены в БД */
         $currentVersion = file_get_contents('update_version_last.txt');
         if ($currentVersion != $this->updateVersion) {
             file_put_contents('update_version_last.txt', $this->updateVersion);
@@ -41,8 +42,6 @@ class UpdateController extends Controller
 
     /* @brief Удалить все файлы в папке rarfiles */
     public function deleteAllInRarFolder() {
-//        chmod("/rarfiles/*", 755);   // decimal; probably incorrect
-
         $files = glob('rarfiles/*'); /* Получить все названия файлов */
         foreach($files as $file) {
             if(is_file($file))

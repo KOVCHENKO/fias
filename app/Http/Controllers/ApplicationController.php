@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\DB;
 class ApplicationController extends Controller
 {
     public function sendApplication(Request $request) {
-        /*Mail::send('mail/new_address', [
-            'houseNumber' => $request['new-house'],
-            'streetName' => $request['new-street'],
-            'fullAddress' => $request['comments']
+        Mail::send('mail/new_address', [
+            'houseNumber' => $request['data']['new-house'],
+            'streetName' => $request['data']['new-street'],
+            'fullAddress' => $request['data']['comments']
         ], function($message) {
             $message->to(env('MAIL_USERNAME'))
                 ->subject('FIAS: NEW ADDRESS');
-        });*/
+        });
 
         if ($request['data']['person_id'] == 'undefined') {
             DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
@@ -35,6 +35,17 @@ class ApplicationController extends Controller
         }
 
         return "Request has been performed. Application will be sent to the database.";
+    }
 
+    public function getAllApplications() {
+        $requests = DB::table('requests')->get();
+
+        return view('applications')->with('requests', $requests);
+    }
+
+    public function delete($id) {
+        DB::table('requests')->where('id', '=', $id)->delete();
+
+        return redirect()->back();
     }
 }
