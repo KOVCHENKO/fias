@@ -40,7 +40,7 @@ Route::get('/choose_building/{street_id}', 'QuerryController@chooseBuilding');
 /* Отправить заявку, если номера дома нет в списке ФИАС */
 Route::post('/send_application', 'ApplicationController@sendApplication');
 Route::get('/get_all_applications', 'ApplicationController@getAllApplications'); /* Вывести все заявки */
-Route::get('/application_delete/{id}', 'APplicationController@delete');
+Route::get('/application_delete/{id}', 'ApplicationController@delete');
 
 
 
