@@ -77,7 +77,7 @@
             </div>
         </div>
         <div v-if="application.applicationSendMessage">
-            <p style="float: right">{{ application.applicationMessage }}</p>
+            <p style="float: right">@{{ application.applicationMessage }}</p>
         </div>
 
         <input name="alias" type="hidden" data-alias="address" v-model="address.string">
