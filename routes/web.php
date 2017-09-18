@@ -40,10 +40,14 @@ Route::get('/choose_building/{street_id}', 'QuerryController@chooseBuilding');
 /* Отправить заявку, если номера дома нет в списке ФИАС */
 Route::post('/send_application', 'ApplicationController@sendApplication');
 Route::get('/get_all_applications', 'ApplicationController@getAllApplications'); /* Вывести все заявки */
+Route::get('/get_all_applications_spa' , 'ApplicationController@getAllApplicationsSPA'); /* Вывести все заявки - spa запрос */
+Route::get('/get_all_applications_view', 'ApplicationController@getAllApplicationsView');
+Route::post('/add_address_to_database', 'ApplicationController@addAddressToDatabase');
+
 Route::get('/application_delete/{id}', 'ApplicationController@delete');
 
-
-
+Route::get('/last_houseguid', 'QuerryController@getLastHOUSEGUID'); /* Отдача последнего id дома */
+Route::get('/short_cadnum_definition/{district_id}/{city_id}', 'QuerryController@defineShortCadNum'); /* Определение короткого кадастрового номера */
 /*
 |--------------------------------------------------------------------------
 | Web Routes

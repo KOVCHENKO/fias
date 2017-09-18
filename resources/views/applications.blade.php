@@ -32,14 +32,21 @@
         <tbody>
         @foreach($requests as $request)
             <tr>
-                <td>{{ $request->person_id }}</td>
-                <td>{{ $request->new_region }}</td>
+                <td>
+                    <p>{{ $request->person_id }}</p>
+                    <p>Number</p>
+                </td>
+                <td>
+                    {{ $request->new_region }}
+                    <p>Astrakhan oblast</p>
+                </td>
                 <td>{{ $request->new_district }}</td>
                 <td>{{ $request->new_city }}</td>
                 <td>{{ $request->new_street }}</td>
                 <td>{{ $request->new_building }}</td>
                 <td>{{ $request->message }}</td>
                 <td><a href="/application_delete/{{ $request->id }}">Удалить</a></td>
+                <td><a href="/application_add_to_db/{{ $request->id }}">Добавить в базу</a></td>
             </tr>
         @endforeach
         </tbody>
