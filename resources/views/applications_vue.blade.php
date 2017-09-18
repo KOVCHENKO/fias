@@ -77,7 +77,7 @@
             </div>
         </div>
         <div v-if="application.applicationSendMessage">
-            <p style="float: right">Адрес добавлени в базу данных</p>
+            <p style="float: right">{{ application.applicationMessage }}</p>
         </div>
 
         <input name="alias" type="hidden" data-alias="address" v-model="address.string">
@@ -105,6 +105,7 @@
                 <th>Комментарий</th>
                 <th>Обратный email</th>
                 <th>Удалить</th>
+                <th>Уведомить</th>
             </tr>
         </thead>
         <tbody v-for="request in allRequests">
@@ -126,6 +127,7 @@
                 <td> @{{ request.message }}</td>
                 <td> @{{ request.return_email }}</td>
                 <td><button v-on:click="deleteRequest(request.id)">Удалить</button></td>
+                <td><button v-on:click="notifyUser(request.return_email)">Уведомить</button></td>
             </tr>
 
         </tbody>

@@ -44,10 +44,13 @@ Route::get('/get_all_applications_spa' , 'ApplicationController@getAllApplicatio
 Route::get('/get_all_applications_view', 'ApplicationController@getAllApplicationsView');
 Route::post('/add_address_to_database', 'ApplicationController@addAddressToDatabase');
 
-Route::get('/application_delete/{id}', 'ApplicationController@delete');
+Route::get('/application_delete/{id}', 'ApplicationController@delete'); /* Удалить заявку */
+Route::get('/notify_user/{email}', 'ApplicationController@notifyUser'); /* Проинформировать ползователя о новой заявке */
 
 Route::get('/last_houseguid', 'QuerryController@getLastHOUSEGUID'); /* Отдача последнего id дома */
 Route::get('/short_cadnum_definition/{district_id}/{city_id}', 'QuerryController@defineShortCadNum'); /* Определение короткого кадастрового номера */
+Route::get('/validate_email/{email}', 'ApplicationController@applicationEmailValidator');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

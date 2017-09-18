@@ -99,7 +99,8 @@ new Vue({
             STREETNAME: '',
             noAddressMessage: '',
             applicationSendMessage: false,
-            applicationForStreetVisibility: false
+            applicationForStreetVisibility: false,
+            applicationMessage: ''
         }
     },
 
@@ -265,6 +266,7 @@ new Vue({
                     self.cleanAllFields();
 
                     self.application.applicationSendMessage = true;
+                    self.application.applicationMessage = 'Адрес добавлени в базу данных';
                     console.log(response.body);
             }, response => {});
         },
@@ -292,6 +294,13 @@ new Vue({
 
                 this.cleanAllFields();
                 this.getAllCities();
+            });
+        },
+
+        notifyUser(email) {
+            this.$http.get(window.apiAddress + 'notify_user/' + email).then(response => {
+                self.application.applicationSendMessage = true;
+                self.application.applicationMessage = 'Пользователь проинформирован о внесении в базу данных';
             });
         },
 

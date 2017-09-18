@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -10,33 +11,49 @@ use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
-    public function sendApplication(Request $request) {
-        Mail::send('mail/new_address', [
-            'cityName' => $request['data']['new-city'],
-            'houseNumber' => $request['data']['new-house'],
-            'streetName' => $request['data']['new-street'],
-            'fullAddress' => $request['data']['comments'],
-            'return_email' => $request ['data']['return-email']
-        ], function($message) {
-            $message->to(env('MAIL_USERNAME'))
-                ->subject('FIAS: NEW ADDRESS');
-        });
+    /* Email для уведомления пользователя о том, что внесен */
+    protected $notificationEmail;
 
-        if ($request['data']['person_id'] == 'undefined') {
-            DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
-                $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
-        } else if (isset($request['data']['person_id'])) {
-            DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
-                $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
+
+    public function sendApplication(Request $request) {
+        $returnEmail = $request['data']['return-email'];
+
+        if($returnEmail == '') {
+            return "{'status': 'error', 'message': 'Заявка не принята. Отправьте заявку еще раз, и введите правильный email'}";
+        } elseif($this->applicationEmailValidator($returnEmail) == true) {
+            return "{'status': 'error', 'message': 'Заявка с таким email уже была принята. Ответ будет выслан на данный email'}";
         } else {
-            DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
-                $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
+            Mail::send('mail/new_address', [
+                'cityName' => $request['data']['new-city'],
+                'houseNumber' => $request['data']['new-house'],
+                'streetName' => $request['data']['new-street'],
+                'fullAddress' => $request['data']['comments'],
+                'return_email' => $request ['data']['return-email']
+            ], function($message) {
+                $message->to(env('MAIL_USERNAME'))
+                    ->subject('FIAS: NEW ADDRESS');
+            });
+
+            if ($request['data']['person_id'] == 'undefined') {
+                DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
+                    $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
+                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
+            } else if (isset($request['data']['person_id'])) {
+                DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
+                    $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
+                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
+            } else {
+                DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
+                    $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
+                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
+            }
+
+            return "{'status': 'success', 'message': 'Ваше обращение отправлено на рассмотрение. В ближайшее время Ваше обращение будет рассмотрено, 
+                и на почтовый ящик, указанный в поле \"Обратный адрес эл.почты\" придет письмо с уведомлением, 
+                просле чего Вы сможете продолжить заполнение персональной информации.'}";
         }
 
-        return "Request has been performed. Application will be sent to the database.";
+
     }
 
     /* For laravel blade */
@@ -84,5 +101,33 @@ class ApplicationController extends Controller
         DB::table('requests')->where('id', '=', $id)->delete();
 
         return 'success';
+    }
+
+    public function notifyUser($email) {
+        $this->notificationEmail = $email;
+
+        Mail::send('mail/user_application_notification', [
+            'information' => 'dummy_variable_information'
+        ], function($message) {
+            $message->to($this->notificationEmail)
+                ->subject('Адрес в АС ПУД Зарегистрирован');
+        });
+
+        return 'User has been notified regarding new email';
+    }
+
+    /* Функция валидатор */
+    public function applicationEmailValidator($requestedEmail) {
+        $emailsForCheck = DB::table('requests')
+            ->select('return_email')->get();
+
+        foreach($emailsForCheck as $emailForCheck) {
+            if($emailForCheck->return_email == $requestedEmail) {
+                return true;
+                break;
+            }
+        }
+
+        return false;
     }
 }
