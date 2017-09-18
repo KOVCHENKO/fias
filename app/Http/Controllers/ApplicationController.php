@@ -19,9 +19,15 @@ class ApplicationController extends Controller
         $returnEmail = $request['data']['return-email'];
 
         if($returnEmail == '') {
-            return "{'status': 'error', 'message': 'Заявка не принята. Отправьте заявку еще раз, и введите правильный email'}";
+            return json_encode([
+               'status' => 'error',
+                'message' => 'Заявка не принята. Отправьте заявку еще раз, и введите правильный email'
+            ]);
         } elseif($this->applicationEmailValidator($returnEmail) == true) {
-            return "{'status': 'error', 'message': 'Заявка с таким email уже была принята. Ответ будет выслан на данный email'}";
+            return json_encode([
+                'status' => 'error',
+                'message' => 'Заявка с таким email уже была принята. Ответ будет выслан на данный email'
+            ]);
         } else {
             Mail::send('mail/new_address', [
                 'cityName' => $request['data']['new-city'],
@@ -48,9 +54,12 @@ class ApplicationController extends Controller
                     $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
             }
 
-            return "{'status': 'success', 'message': 'Ваше обращение отправлено на рассмотрение. В ближайшее время Ваше обращение будет рассмотрено, 
-                и на почтовый ящик, указанный в поле \"Обратный адрес эл.почты\" придет письмо с уведомлением, 
-                просле чего Вы сможете продолжить заполнение персональной информации.'}";
+            return json_encode([
+                'status' => 'success',
+                'message' => 'Ваше обращение отправлено на рассмотрение. В ближайшее время Ваше обращение будет рассмотрено, 
+                                и на почтовый ящик, указанный в поле "Обратный адрес эл.почты" придет письмо с уведомлением, 
+                                просле чего Вы сможете продолжить заполнение персональной информации.'
+            ]);
         }
 
 
