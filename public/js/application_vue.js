@@ -1,4 +1,4 @@
-window.apiAddress = 'http://fiasadr/';
+window.apiAddress = 'https://fias.webart.im/';
 
 new Vue({
     el: '#app',
