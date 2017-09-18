@@ -12,9 +12,11 @@ class ApplicationController extends Controller
 {
     public function sendApplication(Request $request) {
         Mail::send('mail/new_address', [
+            'cityName' => $request['data']['new-city'],
             'houseNumber' => $request['data']['new-house'],
             'streetName' => $request['data']['new-street'],
-            'fullAddress' => $request['data']['comments']
+            'fullAddress' => $request['data']['comments'],
+            'return_email' => $request ['data']['return-email']
         ], function($message) {
             $message->to(env('MAIL_USERNAME'))
                 ->subject('FIAS: NEW ADDRESS');
@@ -23,15 +25,15 @@ class ApplicationController extends Controller
         if ($request['data']['person_id'] == 'undefined') {
             DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
                 $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                $request['data']['new-house']."','".$request['data']['comments']."')");
+                $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
         } else if (isset($request['data']['person_id'])) {
             DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
                 $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                $request['data']['new-house']."','".$request['data']['comments']."')");
+                $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
         } else {
             DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
                 $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                $request['data']['new-house']."','".$request['data']['comments']."')");
+                $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
         }
 
         return "Request has been performed. Application will be sent to the database.";

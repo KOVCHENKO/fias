@@ -103,6 +103,7 @@
                 <th>Улица</th>
                 <th>Строение</th>
                 <th>Комментарий</th>
+                <th>Обратный email</th>
                 <th>Удалить</th>
             </tr>
         </thead>
@@ -123,6 +124,7 @@
                 <td> @{{ request.new_street }}</td>
                 <td> @{{ request.new_building }}</td>
                 <td> @{{ request.message }}</td>
+                <td> @{{ request.return_email }}</td>
                 <td><button v-on:click="deleteRequest(request.id)">Удалить</button></td>
             </tr>
 
