@@ -6,5 +6,5 @@
     Новый дом: {{ $houseNumber  }} <br>
     Обратный email: {{ $return_email }}
 
-    Для просмотра, кликните по <a href="{{ env('APP_URL') }}/get_all_applications">ссылке</a>
+    Для просмотра, кликните по <a href="{{ env('APP_URL') }}/get_all_applications_view">ссылке</a>
 </p>

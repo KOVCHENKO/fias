@@ -82,7 +82,7 @@ class QuerryController extends Controller
             ->get();
 
         foreach($allStreets as $singleStreet) {
-            $singleStreet->FORMALNAME = $singleStreet->SHORTNAME.'. '.$singleStreet->FORMALNAME;
+            $singleStreet->FORMALNAME = trim($singleStreet->SHORTNAME).'. '.trim($singleStreet->FORMALNAME);
         }
 
         return $allStreets;

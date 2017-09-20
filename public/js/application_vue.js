@@ -146,7 +146,7 @@ new Vue({
         getStreets() {
             let self = this;
 
-            this.$http.get('https://fias.webart.im/choose_street/' + this.address.city.AOGUID).then(response => {
+            this.$http.get(window.apiAddress + 'choose_street/' + this.address.city.AOGUID).then(response => {
                 if (response.body.length === 0) {
                     self.streets.push({"FORMALNAME": "Улицы отсутствуют", "AOGUID": self.address.city.AOGUID});
                     self.application.applicationForStreetVisibility = true;
@@ -180,7 +180,7 @@ new Vue({
         /* Получить все здания */
         getBuildings() {
             let self = this;
-            this.$http.get('https://fias.webart.im/choose_building/' + this.address.street.AOGUID).then(response => {
+            this.$http.get(window.apiAddress + 'choose_building/' + this.address.street.AOGUID).then(response => {
                 if (response.body.length === 0) {
                     self.buildings.push({"FORMALNAME": "Нет данных "});
                     self.application.noAddressMessage = 'Домов нет на улице. Добавьте новый дом.';
