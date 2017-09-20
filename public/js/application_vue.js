@@ -1,4 +1,5 @@
 window.apiAddress = 'https://fias.webart.im/';
+// window.apiAddress = 'http://fiasadr/';
 
 new Vue({
     el: '#app',
@@ -266,6 +267,8 @@ new Vue({
                     self.cleanAllFields();
 
                     self.application.applicationSendMessage = true;
+                    setTimeout(() => { self.application.applicationSendMessage = false; }, 4000);
+
                     self.application.applicationMessage = 'Адрес добавлени в базу данных';
                     console.log(response.body);
             }, response => {});
@@ -298,9 +301,11 @@ new Vue({
         },
 
         notifyUser(email) {
+            let self = this;
             this.$http.get(window.apiAddress + 'notify_user/' + email).then(response => {
-                self.application.applicationSendMessage = true;
-                self.application.applicationMessage = 'Пользователь проинформирован о внесении в базу данных';
+                this.application.applicationSendMessage = true;
+                setTimeout(() => { self.application.applicationSendMessage = false; }, 4000);
+                this.application.applicationMessage = 'Пользователь проинформирован о внесении в базу данных';
             });
         },
 

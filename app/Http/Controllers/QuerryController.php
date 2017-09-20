@@ -19,7 +19,7 @@ class QuerryController extends Controller
 
         foreach($allCities as $key => $value) {
             array_push($allCitiesArray, ([
-                'FORMALNAME' => $value->city.' ('.$value->district.')',
+                'FORMALNAME' => $value->city.' ('.trim($value->district).')',
                 'PARENTGUID' => $value->PARENTGUID,
                 'AOGUID' => $value->AOGUID,
                 'SHORTNAME' => $value->SHORTNAME,
