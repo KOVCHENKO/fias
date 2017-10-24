@@ -48,6 +48,8 @@ Route::get('/application_delete/{id}', 'ApplicationController@delete'); /* Уд�
 Route::get('/notify_user/{email}', 'ApplicationController@notifyUser'); /* Проинформировать ползователя о новой заявке */
 
 Route::get('/last_houseguid', 'QuerryController@getLastHOUSEGUID'); /* Отдача последнего id дома */
+Route::get('/last_streetaoguid', 'QuerryController@getLastAOGUIDofStreet'); /* Отдача последнего id улицы - для внесения в обновленную БД */
+
 Route::get('/short_cadnum_definition/{district_id}/{city_id}', 'QuerryController@defineShortCadNum'); /* Определение короткого кадастрового номера */
 Route::get('/validate_email/{email}', 'ApplicationController@applicationEmailValidator');
 

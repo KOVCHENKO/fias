@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class QuerryController extends Controller
 {
+    protected $cityId;
+
     /* Выбрать все города в общем по всей области - в скобках - название области */
     public function getAllCities() {
         $allCitiesArray = array();
@@ -19,10 +21,10 @@ class QuerryController extends Controller
 
         foreach($allCities as $key => $value) {
             array_push($allCitiesArray, ([
-                'FORMALNAME' => $value->city.' ('.trim($value->district).')',
+                'FORMALNAME' => trim($value->city).' ('.trim($value->district).')',
                 'PARENTGUID' => $value->PARENTGUID,
                 'AOGUID' => $value->AOGUID,
-                'SHORTNAME' => $value->SHORTNAME,
+                'SHORTNAME' => trim($value->SHORTNAME),
             ]));
         }
 
@@ -168,8 +170,24 @@ class QuerryController extends Controller
         return $maxString;
     }
 
+    /* Получить последний id улицы */
+    public function getLastAOGUIDofStreet() {
+        $streets = DB::table('addrs')
+            ->select('AOGUID', 'AOID')
+            ->where('VERSION', '=', '001')->get();
 
-    protected $cityId;
+        $streetGUIDs = array();
+
+        foreach($streets as $street) {
+            array_push($streetGUIDs, substr($street->AOGUID, -12));
+        }
+
+        $max = '1'.max($streetGUIDs);
+        $maxPlus = (float)$max + 1;
+        $maxString = substr((string)$maxPlus, 1);
+
+        return $maxString;
+    }
 
     /* Определить кадастровый номер района */
     public function defineShortCadNum($districtId, $cityId) {
