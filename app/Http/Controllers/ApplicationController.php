@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 
@@ -132,11 +130,44 @@ class ApplicationController extends Controller
             'STREETCODE' => NULL, 'TERRIFNSFL' => NULL, 'TERRIFNSUL' => NULL,
             'UPDATEDATE' => NULL, 'CTARCODE' => NULL, 'EXTRCODE' => NULL, 'SEXTCODE' => NULL, 'LIVESTATUS' => NULL,
             'NORMDOC' => NULL, 'PLANCODE' => NULL, 'CADNUM' => NULL, 'DIVTYPE' => NULL,
-            'VERSION' => '001', 'SHORTCADNUM' => $shortCadNum
+            'VERSION' => '002', 'SHORTCADNUM' => $shortCadNum
         ]);
 
         return 'success';
     }
+
+    /* Внести новый город в БД */
+    public function addCityToDatabase(Request $request, QuerryController $qc) {
+        $lastAOGUID = $qc->getLastHOUSEGUID();
+        $shortCadNum = $qc->defineShortCadNum($request['DISTRICTID'], $request['CITYID']);
+
+        DB::table('addrs')->insert([
+            'ACTSTATUS' => 1,
+            'AOGUID' => '00000000-0000-0000-0001-'.$lastAOGUID,
+            'AOID' => '00000000-0000-0000-0000-'.$lastAOGUID,
+            'AOLEVEL' => 7,
+            'AREACODE' => NULL, 'AUTOCODE' => NULL, 'CENTSTATUS' => 0,
+            'CITYCODE' => NULL, 'CODE' => NULL, 'CURRSTATUS' => 1,
+            'ENDDATE' => '2079-06-06 00:00:00',
+            'FORMALNAME' => $request['FORMALNAME'],
+            'IFNSFL' => NULL, 'IFNSUL' => NULL, 'NEXTID' => NULL,
+            'OFFNAME' => $request['FORMALNAME'],
+            'OKATO' => NULL, 'OKTMO' => NULL, 'OPERSTATUS' => NULL,
+            'PARENTGUID' => $request['PARENTGUID'],
+            'PLACECODE' => NULL, 'PLAINCODE' => NULL,
+            'POSTALCODE' => $request['POSTALCODE'],
+            'PREVID' => NULL, 'REGIONCODE' => NULL, 'SHORTNAME' => $request['SHORTNAME'],
+            'STARTDATE' => Carbon::now()->toDateTimeString(),
+            'STREETCODE' => NULL, 'TERRIFNSFL' => NULL, 'TERRIFNSUL' => NULL,
+            'UPDATEDATE' => NULL, 'CTARCODE' => NULL, 'EXTRCODE' => NULL, 'SEXTCODE' => NULL, 'LIVESTATUS' => NULL,
+            'NORMDOC' => NULL, 'PLANCODE' => NULL, 'CADNUM' => NULL, 'DIVTYPE' => NULL,
+            'VERSION' => '002', 'SHORTCADNUM' => $shortCadNum
+        ]);
+
+        return 'success';
+    }
+
+
 
     /* Удалить запрос на внесение в БД */
     public function delete($id) {

@@ -43,6 +43,7 @@ Route::get('/get_all_applications', 'ApplicationController@getAllApplications');
 Route::get('/get_all_applications_spa' , 'ApplicationController@getAllApplicationsSPA'); /* Вывести все заявки - spa запрос */
 Route::get('/get_all_applications_view', 'ApplicationController@getAllApplicationsView');
 Route::post('/add_address_to_database', 'ApplicationController@addAddressToDatabase');
+Route::post('/add_street_to_database', 'ApplicationController@addStreetToDatabase');
 
 Route::get('/application_delete/{id}', 'ApplicationController@delete'); /* Удалить заявку */
 Route::get('/notify_user/{email}', 'ApplicationController@notifyUser'); /* Проинформировать ползователя о новой заявке */
