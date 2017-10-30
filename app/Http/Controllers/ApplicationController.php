@@ -12,17 +12,13 @@ class ApplicationController extends Controller
 {
     /* Email для уведомления пользователя о том, что внесен */
     protected $notificationEmail;
+    protected $verifiedNotificationEmail;
 
 
     public function sendApplication(Request $request) {
-        $returnEmail = $request['data']['return-email'];
+        $returnEmail = $request['data']['verified-email'];
 
-        if($returnEmail == '') {
-            return json_encode([
-               'status' => 'error',
-                'message' => 'Заявка не принята. Отправьте заявку еще раз, и введите правильный email'
-            ]);
-        } elseif($this->applicationEmailValidator($returnEmail) == true) {
+        if($this->applicationEmailValidator($returnEmail) == true) {
             return json_encode([
                 'status' => 'error',
                 'message' => 'Заявка с таким email уже была принята. Ответ будет выслан на данный email'
@@ -42,16 +38,14 @@ class ApplicationController extends Controller
             if ($request['data']['person_id'] == 'undefined') {
                 DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
                     $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
+                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."','".$request['data']['verified-email']."')");
             } else if (isset($request['data']['person_id'])) {
                 DB::statement("INSERT INTO requests values(DEFAULT,".$request['data']['person_id'].",'".
                     $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
-            } else {
+                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."','".$request['data']['verified-email']."')");            } else {
                 DB::statement("INSERT INTO requests values(DEFAULT,".'0'.",'".
                     $request['data']['new-district']."','".$request['data']['new-region']."','".$request['data']['new-city']."','".$request['data']['new-street']."','".
-                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."')");
-            }
+                    $request['data']['new-house']."','".$request['data']['comments']."','".$request['data']['return-email']."','".$request['data']['verified-email']."')");            }
 
             return json_encode([
                 'status' => 'success',
@@ -176,15 +170,25 @@ class ApplicationController extends Controller
         return 'success';
     }
 
-    public function notifyUser($email) {
-        $this->notificationEmail = $email;
+    public function notifyUser(Request $request) {
+        $this->notificationEmail = $request['notificationEmail'];
+        $this->verifiedNotificationEmail = $request['verifiedEmail'];
 
         Mail::send('mail/user_application_notification', [
             'information' => 'dummy_variable_information'
         ], function($message) {
-            $message->to($this->notificationEmail)
+            $message->to($this->verifiedNotificationEmail)
                 ->subject('Адрес в АС ПУД Зарегистрирован');
         });
+
+        if($this->notificationEmail != '') {
+            Mail::send('mail/user_application_notification', [
+                'information' => 'dummy_variable_information'
+            ], function($message) {
+                $message->to($this->notificationEmail)
+                    ->subject('Адрес в АС ПУД Зарегистрирован');
+            });
+        }
 
         return 'User has been notified regarding new email';
     }
@@ -192,10 +196,10 @@ class ApplicationController extends Controller
     /* Функция валидатор */
     public function applicationEmailValidator($requestedEmail) {
         $emailsForCheck = DB::table('requests')
-            ->select('return_email')->get();
+            ->select('verified_email')->get();
 
         foreach($emailsForCheck as $emailForCheck) {
-            if($emailForCheck->return_email == $requestedEmail) {
+            if($emailForCheck->verified_email == $requestedEmail) {
                 return true;
                 break;
             }

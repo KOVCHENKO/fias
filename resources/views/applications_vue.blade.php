@@ -103,6 +103,7 @@
                 <th>Улица</th>
                 <th>Строение</th>
                 <th>Комментарий</th>
+                <th>Дополнительный email</th>
                 <th>Обратный email</th>
                 <th>Удалить</th>
                 <th>Уведомить</th>
@@ -126,8 +127,9 @@
                 <td> @{{ request.new_building }}</td>
                 <td> @{{ request.message }}</td>
                 <td> @{{ request.return_email }}</td>
+                <td> @{{ request.verified_email }}</td>
                 <td><button v-on:click="deleteRequest(request.id)">Удалить</button></td>
-                <td><button v-on:click="notifyUser(request.return_email)">Уведомить</button></td>
+                <td><button v-on:click="notifyUser(request.return_email, request.verified_email)">Уведомить</button></td>
             </tr>
 
         </tbody>

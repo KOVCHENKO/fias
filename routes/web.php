@@ -46,7 +46,7 @@ Route::post('/add_address_to_database', 'ApplicationController@addAddressToDatab
 Route::post('/add_street_to_database', 'ApplicationController@addStreetToDatabase');
 
 Route::get('/application_delete/{id}', 'ApplicationController@delete'); /* Удалить заявку */
-Route::get('/notify_user/{email}', 'ApplicationController@notifyUser'); /* Проинформировать ползователя о новой заявке */
+Route::post('/notify_user', 'ApplicationController@notifyUser'); /* Проинформировать ползователя о новой заявке */
 
 Route::get('/last_houseguid', 'QuerryController@getLastHOUSEGUID'); /* Отдача последнего id дома */
 Route::get('/last_streetaoguid', 'QuerryController@getLastAOGUIDofStreet'); /* Отдача последнего id улицы - для внесения в обновленную БД */

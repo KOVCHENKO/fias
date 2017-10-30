@@ -300,9 +300,12 @@ new Vue({
             });
         },
 
-        notifyUser(email) {
+        notifyUser(email, verifiedEmail) {
             let self = this;
-            this.$http.get(window.apiAddress + 'notify_user/' + email).then(response => {
+            this.$http.post(window.apiAddress + 'notify_user/', {
+                notificationEmail: email,
+                verifiedEmail: verifiedEmail
+            }).then(response => {
                 this.application.applicationSendMessage = true;
                 setTimeout(() => { self.application.applicationSendMessage = false; }, 4000);
                 this.application.applicationMessage = 'Пользователь проинформирован о внесении в базу данных';
