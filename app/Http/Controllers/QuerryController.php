@@ -138,6 +138,7 @@ class QuerryController extends Controller
                 'FORMALNAME' => $formalName,
                 'POSTALCODE' => $value->POSTALCODE,
                 'SHORTCADNUM' => $value->SHORTCADNUM,
+                'HOUSEGUID' => $value->HOUSEGUID
             ]);
 
             array_push($allHousesInStreet, $singleHouse);
@@ -146,11 +147,23 @@ class QuerryController extends Controller
         return $allHousesInStreet;
     }
 
+    /* Получить все квартиры/комнаты в помещении */
+    public function chooseFlat($buildingId)
+    {
+        return DB::table('flats')
+            ->select('ROOMGUID', 'HOUSEGUID', 'FLATNUMBER', 'ROOMNUMBER')
+            ->distinct()
+            ->where('HOUSEGUID', '=', $buildingId)
+            ->get();
+    }
+
     /* Обновить информацию об адресе вручную */
     public function updatePosition($second, $first) {
 
 
     }
+
+
 
     /* Получить последний id дома */
     public function getLastHOUSEGUID() {
