@@ -47,6 +47,7 @@ Route::get('/get_all_applications_spa' , 'ApplicationController@getAllApplicatio
 Route::get('/get_all_applications_view', 'ApplicationController@getAllApplicationsView');
 Route::post('/add_address_to_database', 'ApplicationController@addAddressToDatabase');
 Route::post('/add_street_to_database', 'ApplicationController@addStreetToDatabase');
+Route::post('/add_city_to_database', 'ApplicationController@addCityToDatabase');
 
 Route::get('/application_delete/{id}', 'ApplicationController@delete'); /* Удалить заявку */
 Route::post('/notify_user', 'ApplicationController@notifyUser'); /* Проинформировать ползователя о новой заявке */
