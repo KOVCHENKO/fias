@@ -73,10 +73,22 @@ class QuerryController extends Controller
         return $allCities;
     }
 
+    private function getCityByAOGUI($aoguid) {
+        return DB::table('addrs')
+            ->select('AOGUID', 'FORMALNAME', 'PARENTGUID')
+            ->where([
+                'AOGUID' => $aoguid,
+                'ACTSTATUS' => 1
+            ])
+            ->orderBy('CENTSTATUS', 'desc')
+            ->first();
+
+    }
+
     /* Выбрать все улицы */
     public function chooseStreet($cityId) {
         $allStreets = DB::table('addrs')
-            ->select('AOGUID', 'FORMALNAME', 'SHORTNAME', 'SHORTCADNUM')
+            ->select('AOGUID', 'FORMALNAME', 'SHORTNAME', 'PARENTGUID')
             ->where([
                 'PARENTGUID' => $cityId,
                 'ACTSTATUS' => 1
@@ -85,6 +97,12 @@ class QuerryController extends Controller
 
         foreach($allStreets as $singleStreet) {
             $singleStreet->FORMALNAME = trim($singleStreet->SHORTNAME).'. '.trim($singleStreet->FORMALNAME);
+        }
+
+        foreach($allStreets as $singleStreet) {
+            $city = $this->getCityByAOGUI($singleStreet->PARENTGUID);
+            $shortCadNum = $this->defineShortCadNum($city->PARENTGUID, $singleStreet->PARENTGUID);
+            $singleStreet->SHORTCADNUM = $shortCadNum;
         }
 
         return $allStreets;
